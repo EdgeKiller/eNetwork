@@ -31,8 +31,8 @@ namespace eNetwork
         public delegate void ServerConnectedDataHandler(eSClient client);
         public delegate void ServerDisconnectedDataHandler(eSClient client);
 
-        public event ServerReceiveDataHandler OnServerDataReceived;
-        public event ServerConnectedDataHandler OnNewClientConnected;
+        public event ServerReceiveDataHandler OnDataReceived;
+        public event ServerConnectedDataHandler OnClientConnected;
         public event ServerDisconnectedDataHandler OnClientDisconnected;
 
         private int countID = 1;
@@ -86,8 +86,8 @@ namespace eNetwork
                 client.GetStream().Write(Encoding.UTF8.GetBytes(countID.ToString()), 0, Encoding.UTF8.GetBytes(countID.ToString()).Length);
                 client.GetStream().Flush();
                 countID++;
-                if (OnNewClientConnected != null)
-                    OnNewClientConnected.Invoke(sClient);
+                if (OnClientConnected != null)
+                    OnClientConnected.Invoke(sClient);
                 Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClient));
                 clientThread.Start(sClient);
             }
@@ -131,11 +131,11 @@ namespace eNetwork
                     break;    
                 }
 
-                if(OnServerDataReceived != null)
+                if(OnDataReceived != null)
                 {
                     try
                     {
-                        OnServerDataReceived.Invoke(sClient, data);
+                        OnDataReceived.Invoke(sClient, data);
                     }
                     catch (Exception ex)
                     {

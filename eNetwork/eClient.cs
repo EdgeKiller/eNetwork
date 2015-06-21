@@ -32,12 +32,13 @@ namespace eNetwork
         public delegate void ClientConnected();
         public delegate void ClientDisconnected();
 
-        public event ClientReceiveDataHandler OnClientDataReceived;
-        public event ClientConnected OnClientConnected;
-        public event ClientDisconnected OnClientDisconnected;
+        public event ClientReceiveDataHandler OnDataReceived;
+        public event ClientConnected OnConnected;
+        public event ClientDisconnected OnDisconnected;
 
         #endregion
 
+        
         // Constructor
         public eClient(string IP, int Port)
         {
@@ -61,8 +62,8 @@ namespace eNetwork
                 client.GetStream().Read(id, 0, client.ReceiveBufferSize);
                 this.id = Convert.ToInt16(Encoding.UTF8.GetString(id).TrimEnd());
                 Log("Connected with ID : " + this.id);
-                if (OnClientConnected != null)
-                    OnClientConnected.Invoke();
+                if (OnConnected != null)
+                    OnConnected.Invoke();
                 HandleThread.Start();
             }
             catch (Exception ex)
@@ -99,11 +100,11 @@ namespace eNetwork
                     Debug("Error when reading from stream : " + ex.Message);
                 }
 
-                if (OnClientDataReceived != null)
+                if (OnDataReceived != null)
                 {
                     try
                     {
-                        OnClientDataReceived.Invoke(data);
+                        OnDataReceived.Invoke(data);
                     }
                     catch (Exception ex)
                     {
@@ -112,8 +113,8 @@ namespace eNetwork
                 }
             }
 
-            if (OnClientDisconnected != null)
-                OnClientDisconnected.Invoke();
+            if (OnDisconnected != null)
+                OnDisconnected.Invoke();
         }
 
         // Send data to server
