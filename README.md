@@ -131,8 +131,4 @@ You can send ePacket, you just need to serialize (and maybe compress) it.
 
 #### • eSClient
 
-<<<<<<< HEAD
 eSClient contains a TCPClient and the ID (int).
-=======
-eSClient contains a TCPClient and the ID (int).
->>>>>>> 7b83f6a6240b4670f6aed8008bc5cf40b4e4c44a
